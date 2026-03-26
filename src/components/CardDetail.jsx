@@ -103,11 +103,17 @@ export default function CardDetail({ issue, onClose, funMode, palette }) {
           {/* Body */}
           {issue.body && (
             <div style={{
-              background: 'rgba(255,255,255,0.5)', borderRadius: '16px',
-              padding: '14px 16px', marginBottom: '20px',
-              border: `1.5px solid ${p.border}55`,
+              background: 'rgba(255,255,255,0.6)',
+              borderRadius: '16px',
+              padding: '16px 18px',
+              marginBottom: '20px',
+              borderLeft: `4px solid ${p.border}`,
+              boxShadow: `inset 0 0 0 1px ${p.border}33`,
             }}>
-              <p style={{ fontSize: '13px', color: '#374151', lineHeight: 1.7, whiteSpace: 'pre-wrap', margin: 0, fontWeight: 600 }}>
+              <div style={{ fontSize: '10px', fontWeight: 900, color: p.accent, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '8px', opacity: 0.8 }}>
+                📝 Description
+              </div>
+              <p style={{ fontSize: '14px', color: '#1e1b4b', lineHeight: 1.75, whiteSpace: 'pre-wrap', margin: 0, fontWeight: 700 }}>
                 {issue.body}
               </p>
             </div>
