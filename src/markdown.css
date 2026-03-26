@@ -34,9 +34,9 @@
 .md-body--normal a { color: #2563eb; }
 
 /* Dark purple mode */
-.md-body--dark { color: #9d96b8; font-size: 13px; }
-.md-body--dark h1, .md-body--dark h2 { color: #ede9f8; font-weight: 700; font-size: 15px; padding-bottom: 6px; border-bottom: 1px solid #3d3660; }
-.md-body--dark h3 { color: #c4b5fd; font-weight: 700; font-size: 13px; }
+.md-body--dark { color: #c4bedd; font-size: 14px; line-height: 1.8; }
+.md-body--dark h1, .md-body--dark h2 { color: #ede9f8; font-weight: 700; font-size: 16px; padding-bottom: 6px; border-bottom: 1px solid #3d3660; }
+.md-body--dark h3 { color: #d4cafe; font-weight: 700; font-size: 15px; }
 .md-body--dark strong { color: #ede9f8; font-weight: 700; }
 .md-body--dark em { color: #c4b5fd; }
 .md-body--dark code { background: #2a2540; color: #c4b5fd; border: 1px solid #3d3660; }
