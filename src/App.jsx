@@ -6,6 +6,7 @@ import FilterBar from './components/FilterBar';
 import WeeklyGoal from './components/WeeklyGoal';
 import Column from './components/Column';
 import ModeToggle from './components/ModeToggle';
+import Particles from './components/Particles';
 
 const PRIORITY_ORDER = { now: 0, later: 1, null: 2 };
 const EFFORT_ORDER = { large: 0, medium: 1, small: 2, null: 3 };
@@ -59,12 +60,6 @@ export default function App() {
   const proposed = boardIssues.filter((i) => i.status === 'proposed');
   const inProgress = boardIssues.filter((i) => i.status === 'in-progress');
 
-  const normalBg = { background: '#f3f4f6', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' };
-  const funBg = {
-    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%)',
-    fontFamily: '"Nunito", sans-serif',
-  };
-
   return (
     <div style={{
       height: '100vh',
@@ -72,16 +67,23 @@ export default function App() {
       flexDirection: 'column',
       position: 'relative',
       overflow: 'hidden',
+      fontFamily: funMode ? '"Nunito", sans-serif' : '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+      background: funMode ? 'transparent' : '#f3f4f6',
       transition: 'background 0.6s ease',
-      ...(funMode ? funBg : normalBg),
     }}>
+      {/* Animated gradient background for fun mode */}
       {funMode && (
-        <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 0 }}>
-          <div style={{ position: 'absolute', width: 400, height: 400, borderRadius: '50%', background: 'rgba(255,255,255,0.05)', top: -100, left: -100 }} />
-          <div style={{ position: 'absolute', width: 300, height: 300, borderRadius: '50%', background: 'rgba(255,255,255,0.05)', bottom: -50, right: 100 }} />
-          <div style={{ position: 'absolute', width: 200, height: 200, borderRadius: '50%', background: 'rgba(255,255,255,0.07)', top: '40%', left: '60%' }} />
-        </div>
+        <div style={{
+          position: 'absolute',
+          inset: 0,
+          background: 'linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab, #a855f7, #f59e0b)',
+          backgroundSize: '400% 400%',
+          animation: 'gradientShift 8s ease infinite',
+          zIndex: 0,
+        }} />
       )}
+
+      {funMode && <Particles />}
 
       <div style={{ position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column', height: '100%' }}>
         <Header
@@ -118,8 +120,8 @@ export default function App() {
           )}
 
           {loading && issues.length === 0 ? (
-            <div style={{ textAlign: 'center', color: funMode ? 'rgba(255,255,255,0.8)' : '#9ca3af', fontSize: '14px', marginTop: '60px', fontWeight: funMode ? 700 : 400 }}>
-              {funMode ? '✨ Loading your tasks...' : 'Loading…'}
+            <div style={{ textAlign: 'center', color: funMode ? '#fff' : '#9ca3af', fontSize: funMode ? '20px' : '14px', marginTop: '60px', fontWeight: 900 }}>
+              {funMode ? '✨🚀 Loading your epic tasks... 🚀✨' : 'Loading…'}
             </div>
           ) : (
             <div style={{ display: 'flex', gap: '16px', alignItems: 'flex-start', height: 'calc(100vh - 210px)' }}>
@@ -132,8 +134,40 @@ export default function App() {
       </div>
 
       <style>{`
-        @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-6px); } }
-        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        @keyframes gradientShift {
+          0%   { background-position: 0% 50%; }
+          50%  { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
+        }
+        @keyframes float {
+          0%, 100% { transform: translateY(0px); }
+          50%       { transform: translateY(-8px); }
+        }
+        @keyframes spin {
+          from { transform: rotate(0deg); }
+          to   { transform: rotate(360deg); }
+        }
+        @keyframes rainbow {
+          0%   { color: #f87171; }
+          16%  { color: #fb923c; }
+          33%  { color: #facc15; }
+          50%  { color: #4ade80; }
+          66%  { color: #60a5fa; }
+          83%  { color: #c084fc; }
+          100% { color: #f87171; }
+        }
+        @keyframes wiggle {
+          0%, 100% { transform: rotate(-1deg); }
+          50%       { transform: rotate(1deg); }
+        }
+        @keyframes popIn {
+          0%   { transform: scale(0.8) translateY(10px); opacity: 0; }
+          70%  { transform: scale(1.05); }
+          100% { transform: scale(1) translateY(0); opacity: 1; }
+        }
+        .fun-card:hover {
+          cursor: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewport='0 0 100 100' style='font-size:24px'><text y='50%'>✨</text></svg>") 16 16, pointer !important;
+        }
       `}</style>
     </div>
   );
