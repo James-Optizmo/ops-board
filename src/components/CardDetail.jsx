@@ -1,6 +1,9 @@
 import { createPortal } from 'react-dom';
+import { marked } from 'marked';
 import Chip from './Chip';
 import { TEAM_COLORS, PRIORITY_COLORS, EFFORT_COLORS } from '../utils/labels';
+
+marked.setOptions({ breaks: true, gfm: true });
 
 const PRIORITY_FUN = { now: '🚨', later: '🌿' };
 const EFFORT_FUN = { large: '🏋️', medium: '🏃', small: '🚶' };
@@ -113,9 +116,10 @@ export default function CardDetail({ issue, onClose, funMode, palette }) {
               <div style={{ fontSize: '10px', fontWeight: 900, color: p.accent, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '8px', opacity: 0.8 }}>
                 📝 Description
               </div>
-              <p style={{ fontSize: '14px', color: '#1e1b4b', lineHeight: 1.75, whiteSpace: 'pre-wrap', margin: 0, fontWeight: 700 }}>
-                {issue.body}
-              </p>
+              <div
+                className="md-body md-body--fun"
+                dangerouslySetInnerHTML={{ __html: marked(issue.body) }}
+              />
             </div>
           )}
 
@@ -182,7 +186,13 @@ export default function CardDetail({ issue, onClose, funMode, palette }) {
             ))}
           </div>
         )}
-        {issue.body && <p style={{ fontSize: '13px', color: '#4b5563', lineHeight: 1.6, whiteSpace: 'pre-wrap', margin: '0 0 20px' }}>{issue.body}</p>}
+        {issue.body && (
+          <div
+            className="md-body md-body--normal"
+            style={{ marginBottom: '20px' }}
+            dangerouslySetInnerHTML={{ __html: marked(issue.body) }}
+          />
+        )}
         <a href={issue.url} target="_blank" rel="noreferrer" style={{ fontSize: '13px', color: '#2563eb', textDecoration: 'none', fontWeight: 500 }}>
           Open on GitHub →
         </a>
