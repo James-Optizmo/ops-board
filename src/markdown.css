@@ -1,3 +1,9 @@
+/* Global dark mode font */
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
 /* Shared markdown body styles */
 .md-body { font-size: 13px; line-height: 1.7; }
 .md-body p  { margin: 0 0 10px; }
@@ -34,7 +40,7 @@
 .md-body--normal a { color: #2563eb; }
 
 /* Dark purple mode */
-.md-body--dark { color: #c4bedd; font-size: 14px; line-height: 1.8; }
+.md-body--dark { color: #f0eeff; font-size: 15px; line-height: 1.8; font-weight: 400; font-family: "Inter", sans-serif; -webkit-font-smoothing: antialiased; }
 .md-body--dark h1, .md-body--dark h2 { color: #ede9f8; font-weight: 700; font-size: 16px; padding-bottom: 6px; border-bottom: 1px solid #3d3660; }
 .md-body--dark h3 { color: #d4cafe; font-weight: 700; font-size: 15px; }
 .md-body--dark strong { color: #ede9f8; font-weight: 700; }

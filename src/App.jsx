@@ -68,7 +68,7 @@ export default function App() {
       flexDirection: 'column',
       position: 'relative',
       overflow: 'hidden',
-      fontFamily: funMode ? '"Nunito", sans-serif' : '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+      fontFamily: funMode ? '"Nunito", sans-serif' : '"Inter", sans-serif',
       background: funMode ? 'transparent' : dark.bg,
       transition: 'background 0.6s ease',
     }}>

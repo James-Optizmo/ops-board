@@ -165,7 +165,7 @@ export default function CardDetail({ issue, onClose, funMode, palette }) {
     >
       <div
         style={{
-          background: dark.surface, border: `1px solid ${dark.border}`,
+          background: '#2a2540', border: `1px solid ${dark.border}`,
           borderRadius: '14px', padding: '28px', maxWidth: '560px', width: '90%',
           maxHeight: '80vh', overflowY: 'auto',
           boxShadow: `0 24px 60px rgba(0,0,0,0.5), 0 0 0 1px ${dark.accent}33`,
