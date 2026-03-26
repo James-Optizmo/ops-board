@@ -189,7 +189,7 @@ export default function Card({ issue, onUpdate, availableAssignees, funMode }) {
             )}
           </div>
         </div>
-        {open && <CardDetail issue={issue} onClose={() => setOpen(false)} />}
+        {open && <CardDetail issue={issue} onClose={() => setOpen(false)} funMode={funMode} palette={palette} />}
       </>
     );
   }
@@ -233,7 +233,7 @@ export default function Card({ issue, onUpdate, availableAssignees, funMode }) {
           )}
         </div>
       </div>
-      {open && <CardDetail issue={issue} onClose={() => setOpen(false)} />}
+      {open && <CardDetail issue={issue} onClose={() => setOpen(false)} funMode={false} />}
     </>
   );
 }
