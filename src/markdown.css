@@ -24,7 +24,7 @@
 .md-body--fun hr { border-color: rgba(0,0,0,0.1); }
 .md-body--fun a { color: #7c3aed; font-weight: 800; }
 
-/* Normal mode overrides */
+/* Normal (dark) mode overrides */
 .md-body--normal { color: #4b5563; }
 .md-body--normal h1, .md-body--normal h2, .md-body--normal h3 { color: #111827; font-weight: 700; }
 .md-body--normal code { background: #f3f4f6; color: #374151; }
@@ -32,3 +32,19 @@
 .md-body--normal blockquote { background: #f9fafb; border-left: 3px solid #d1d5db; color: #6b7280; }
 .md-body--normal hr { border-color: #e5e7eb; }
 .md-body--normal a { color: #2563eb; }
+
+/* Dark purple mode */
+.md-body--dark { color: #9d96b8; font-size: 13px; }
+.md-body--dark h1, .md-body--dark h2 { color: #ede9f8; font-weight: 700; font-size: 15px; padding-bottom: 6px; border-bottom: 1px solid #3d3660; }
+.md-body--dark h3 { color: #c4b5fd; font-weight: 700; font-size: 13px; }
+.md-body--dark strong { color: #ede9f8; font-weight: 700; }
+.md-body--dark em { color: #c4b5fd; }
+.md-body--dark code { background: #2a2540; color: #c4b5fd; border: 1px solid #3d3660; }
+.md-body--dark pre { background: #1a1628; border: 1px solid #3d3660; }
+.md-body--dark pre code { border: none; background: none; }
+.md-body--dark blockquote { background: #1e1a30; border-left: 3px solid #8b5cf6; color: #9d96b8; padding: 8px 14px; border-radius: 0 6px 6px 0; }
+.md-body--dark hr { border-color: #3d3660; }
+.md-body--dark a { color: #a78bfa; }
+.md-body--dark a:hover { color: #c4b5fd; }
+.md-body--dark ul, .md-body--dark ol { color: #9d96b8; }
+.md-body--dark li::marker { color: #5c5580; }

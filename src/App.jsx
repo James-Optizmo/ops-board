@@ -7,6 +7,7 @@ import WeeklyGoal from './components/WeeklyGoal';
 import Column from './components/Column';
 import ModeToggle from './components/ModeToggle';
 import Particles from './components/Particles';
+import { dark } from './theme';
 
 const PRIORITY_ORDER = { now: 0, later: 1, null: 2 };
 const EFFORT_ORDER = { large: 0, medium: 1, small: 2, null: 3 };
@@ -68,14 +69,12 @@ export default function App() {
       position: 'relative',
       overflow: 'hidden',
       fontFamily: funMode ? '"Nunito", sans-serif' : '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
-      background: funMode ? 'transparent' : '#f3f4f6',
+      background: funMode ? 'transparent' : dark.bg,
       transition: 'background 0.6s ease',
     }}>
-      {/* Animated gradient background for fun mode */}
       {funMode && (
         <div style={{
-          position: 'absolute',
-          inset: 0,
+          position: 'absolute', inset: 0,
           background: 'linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab, #a855f7, #f59e0b)',
           backgroundSize: '400% 400%',
           animation: 'gradientShift 8s ease infinite',
@@ -109,18 +108,19 @@ export default function App() {
 
           {error && (
             <div style={{
-              background: funMode ? 'rgba(255,255,255,0.9)' : '#fef2f2',
-              border: `${funMode ? '2px' : '1px'} solid #fca5a5`,
+              background: funMode ? 'rgba(255,255,255,0.9)' : '#2d1515',
+              border: `1px solid ${funMode ? '#fca5a5' : '#7f1d1d'}`,
               borderRadius: funMode ? '16px' : '8px',
               padding: '12px 16px', marginBottom: '20px',
-              color: '#b91c1c', fontSize: '13px', fontWeight: funMode ? 700 : 400,
+              color: funMode ? '#b91c1c' : '#fca5a5',
+              fontSize: '13px',
             }}>
               {funMode ? '😬 ' : ''}{error}
             </div>
           )}
 
           {loading && issues.length === 0 ? (
-            <div style={{ textAlign: 'center', color: funMode ? '#fff' : '#9ca3af', fontSize: funMode ? '20px' : '14px', marginTop: '60px', fontWeight: 900 }}>
+            <div style={{ textAlign: 'center', color: funMode ? 'rgba(255,255,255,0.8)' : dark.textMuted, fontSize: funMode ? '20px' : '14px', marginTop: '60px', fontWeight: funMode ? 900 : 400 }}>
               {funMode ? '✨🚀 Loading your epic tasks... 🚀✨' : 'Loading…'}
             </div>
           ) : (
@@ -134,40 +134,17 @@ export default function App() {
       </div>
 
       <style>{`
-        @keyframes gradientShift {
-          0%   { background-position: 0% 50%; }
-          50%  { background-position: 100% 50%; }
-          100% { background-position: 0% 50%; }
-        }
-        @keyframes float {
-          0%, 100% { transform: translateY(0px); }
-          50%       { transform: translateY(-8px); }
-        }
-        @keyframes spin {
-          from { transform: rotate(0deg); }
-          to   { transform: rotate(360deg); }
-        }
-        @keyframes rainbow {
-          0%   { color: #f87171; }
-          16%  { color: #fb923c; }
-          33%  { color: #facc15; }
-          50%  { color: #4ade80; }
-          66%  { color: #60a5fa; }
-          83%  { color: #c084fc; }
-          100% { color: #f87171; }
-        }
-        @keyframes wiggle {
-          0%, 100% { transform: rotate(-1deg); }
-          50%       { transform: rotate(1deg); }
-        }
-        @keyframes popIn {
-          0%   { transform: scale(0.8) translateY(10px); opacity: 0; }
-          70%  { transform: scale(1.05); }
-          100% { transform: scale(1) translateY(0); opacity: 1; }
-        }
-        .fun-card:hover {
-          cursor: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewport='0 0 100 100' style='font-size:24px'><text y='50%'>✨</text></svg>") 16 16, pointer !important;
-        }
+        @keyframes gradientShift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+        @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-8px); } }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        @keyframes rainbow { 0% { color: #f87171; } 16% { color: #fb923c; } 33% { color: #facc15; } 50% { color: #4ade80; } 66% { color: #60a5fa; } 83% { color: #c084fc; } 100% { color: #f87171; } }
+        @keyframes wiggle { 0%, 100% { transform: rotate(-1deg); } 50% { transform: rotate(1deg); } }
+        @keyframes popIn { 0% { transform: scale(0.8) translateY(10px); opacity: 0; } 70% { transform: scale(1.05); } 100% { transform: scale(1) translateY(0); opacity: 1; } }
+        .fun-card:hover { cursor: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewport='0 0 100 100' style='font-size:24px'><text y='50%'>✨</text></svg>") 16 16, pointer !important; }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: ${dark.surface}; }
+        ::-webkit-scrollbar-thumb { background: ${dark.border}; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: ${dark.accent}; }
       `}</style>
     </div>
   );

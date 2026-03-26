@@ -3,6 +3,19 @@ import EditableChip from './EditableChip';
 import CardDetail from './CardDetail';
 import Sparkle from './Sparkle';
 import { TEAM_COLORS, PRIORITY_COLORS, EFFORT_COLORS } from '../utils/labels';
+import { dark } from '../theme';
+
+const DARK_PRIORITY_OPTIONS = [
+  { value: 'now',   label: 'Now',   bg: '#2d1515', text: '#fca5a5' },
+  { value: 'later', label: 'Later', bg: '#0f2318', text: '#86efac' },
+  { value: null,    label: 'None',  bg: null,      text: null },
+];
+const DARK_EFFORT_OPTIONS = [
+  { value: 'large',  label: 'Large',  bg: '#1e1a3a', text: '#c4b5fd' },
+  { value: 'medium', label: 'Medium', bg: '#1e1a3a', text: '#c4b5fd' },
+  { value: 'small',  label: 'Small',  bg: '#1e1a3a', text: '#c4b5fd' },
+  { value: null,     label: 'None',   bg: null,      text: null },
+];
 
 const PRIORITY_OPTIONS = [
   { value: 'now', label: 'Now', ...PRIORITY_COLORS.now },
@@ -194,7 +207,14 @@ export default function Card({ issue, onUpdate, availableAssignees, funMode }) {
     );
   }
 
-  // Normal mode
+  const darkPriorityColors = issue.priority
+    ? DARK_PRIORITY_OPTIONS.find((o) => o.value === issue.priority) || { bg: dark.elevated, text: dark.textMuted }
+    : { bg: dark.elevated, text: dark.textMuted };
+  const darkEffortColors = issue.effort
+    ? DARK_EFFORT_OPTIONS.find((o) => o.value === issue.effort) || { bg: dark.elevated, text: dark.textMuted }
+    : { bg: dark.elevated, text: dark.textMuted };
+
+  // Normal (dark) mode
   return (
     <>
       <div
@@ -202,30 +222,42 @@ export default function Card({ issue, onUpdate, availableAssignees, funMode }) {
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
         style={{
-          background: '#fff', border: '1px solid #e5e7eb', borderRadius: '8px',
-          padding: '12px 14px', cursor: 'pointer', transition: 'box-shadow 0.15s',
-          boxShadow: hovered ? '0 4px 12px rgba(0,0,0,0.08)' : 'none',
+          background: hovered ? dark.elevated : dark.card,
+          border: `1px solid ${hovered ? dark.accent + '66' : dark.border}`,
+          borderRadius: '10px',
+          padding: '12px 14px',
+          cursor: 'pointer',
+          transition: 'all 0.15s',
+          boxShadow: hovered ? `0 4px 20px rgba(139,92,246,0.15)` : 'none',
         }}
       >
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '8px' }}>
-          <span style={{ fontSize: '13px', fontWeight: 600, color: '#111827', lineHeight: 1.4, flex: 1 }}>{issue.title}</span>
+          <span style={{ fontSize: '13px', fontWeight: 600, color: dark.textPrimary, lineHeight: 1.4, flex: 1 }}>{issue.title}</span>
           <a href={issue.url} target="_blank" rel="noreferrer" onClick={(e) => e.stopPropagation()}
-            style={{ color: '#9ca3af', fontSize: '13px', flexShrink: 0, textDecoration: 'none' }} title="Open on GitHub">↗</a>
+            style={{ color: dark.textMuted, fontSize: '13px', flexShrink: 0, textDecoration: 'none', transition: 'color 0.15s' }}
+            onMouseEnter={(e) => (e.currentTarget.style.color = dark.accentBright)}
+            onMouseLeave={(e) => (e.currentTarget.style.color = dark.textMuted)}
+            title="Open on GitHub">↗</a>
         </div>
-        <div style={{ fontSize: '11px', color: '#9ca3af', marginTop: '4px', marginBottom: '10px' }}>#{issue.number}</div>
+        <div style={{ fontSize: '11px', color: dark.textMuted, marginTop: '4px', marginBottom: '10px' }}>#{issue.number}</div>
         <div style={{ display: 'flex', gap: '5px', flexWrap: 'wrap', alignItems: 'center' }}>
           {issue.team && (
-            <span style={{ backgroundColor: issue.team === 'platform' ? '#dbeafe' : '#ede9fe', color: issue.team === 'platform' ? '#1d4ed8' : '#6d28d9', fontSize: '11px', fontWeight: 600, padding: '2px 7px', borderRadius: '999px' }}>
+            <span style={{
+              backgroundColor: dark.chips[issue.team].bg,
+              color: dark.chips[issue.team].text,
+              fontSize: '11px', fontWeight: 600, padding: '2px 8px', borderRadius: '999px',
+              border: `1px solid ${dark.chips[issue.team].text}33`,
+            }}>
               {issue.team}
             </span>
           )}
-          <EditableChip label={issue.priority || 'priority'} {...priorityColors} options={PRIORITY_OPTIONS} onSelect={(v) => handleLabelChange('priority', v)} saving={saving === 'priority'} />
-          <EditableChip label={issue.effort || 'effort'} {...effortColors} options={EFFORT_OPTIONS} onSelect={(v) => handleLabelChange('effort', v)} saving={saving === 'effort'} />
+          <EditableChip label={issue.priority || 'priority'} {...darkPriorityColors} options={DARK_PRIORITY_OPTIONS} onSelect={(v) => handleLabelChange('priority', v)} saving={saving === 'priority'} />
+          <EditableChip label={issue.effort || 'effort'} {...darkEffortColors} options={DARK_EFFORT_OPTIONS} onSelect={(v) => handleLabelChange('effort', v)} saving={saving === 'effort'} />
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginTop: '10px', flexWrap: 'wrap' }}>
           {issue.assignees.map((a) => (
             <div key={a.login} title={`Remove @${a.login}`} onClick={(e) => { e.stopPropagation(); handleUnassign(a.login); }} style={{ cursor: 'pointer' }}>
-              <img src={a.avatarUrl} alt={a.login} style={{ width: 20, height: 20, borderRadius: '50%', border: '1.5px solid #e5e7eb', opacity: saving === 'assignee' ? 0.4 : 1 }} />
+              <img src={a.avatarUrl} alt={a.login} style={{ width: 20, height: 20, borderRadius: '50%', border: `1.5px solid ${dark.border}`, opacity: saving === 'assignee' ? 0.4 : 1 }} />
             </div>
           ))}
           {availableAssignees && availableAssignees.length > 0 && (

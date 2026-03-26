@@ -2,6 +2,7 @@ import { createPortal } from 'react-dom';
 import { marked } from 'marked';
 import Chip from './Chip';
 import { TEAM_COLORS, PRIORITY_COLORS, EFFORT_COLORS } from '../utils/labels';
+import { dark } from '../theme';
 
 marked.setOptions({ breaks: true, gfm: true });
 
@@ -156,44 +157,71 @@ export default function CardDetail({ issue, onClose, funMode, palette }) {
     );
   }
 
-  // Normal mode
+  // Normal (dark) mode
   return createPortal(
     <div
-      style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }}
+      style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(4px)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }}
       onClick={onClose}
     >
       <div
-        style={{ background: '#fff', borderRadius: '10px', padding: '28px', maxWidth: '560px', width: '90%', maxHeight: '80vh', overflowY: 'auto', boxShadow: '0 20px 60px rgba(0,0,0,0.2)' }}
+        style={{
+          background: dark.surface, border: `1px solid ${dark.border}`,
+          borderRadius: '14px', padding: '28px', maxWidth: '560px', width: '90%',
+          maxHeight: '80vh', overflowY: 'auto',
+          boxShadow: `0 24px 60px rgba(0,0,0,0.5), 0 0 0 1px ${dark.accent}33`,
+        }}
         onClick={(e) => e.stopPropagation()}
       >
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px' }}>
-          <span style={{ fontSize: '13px', color: '#6b7280' }}>#{issue.number}</span>
-          <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '18px', color: '#6b7280', lineHeight: 1 }}>✕</button>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '14px' }}>
+          <span style={{ fontSize: '12px', color: dark.textMuted, fontWeight: 600 }}>#{issue.number}</span>
+          <button onClick={onClose} style={{ background: dark.elevated, border: `1px solid ${dark.border}`, borderRadius: '6px', cursor: 'pointer', fontSize: '13px', color: dark.textSecondary, width: 28, height: 28, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>✕</button>
         </div>
-        <h2 style={{ margin: '0 0 16px', fontSize: '17px', fontWeight: 700, color: '#111827', lineHeight: 1.4 }}>{issue.title}</h2>
+
+        <h2 style={{ margin: '0 0 16px', fontSize: '17px', fontWeight: 700, color: dark.textPrimary, lineHeight: 1.4 }}>{issue.title}</h2>
+
         <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', marginBottom: '16px' }}>
-          {issue.team && <Chip label={issue.team} {...TEAM_COLORS[issue.team]} />}
-          {issue.priority && <Chip label={issue.priority} {...PRIORITY_COLORS[issue.priority]} />}
-          {issue.effort && <Chip label={issue.effort} {...EFFORT_COLORS[issue.effort]} />}
+          {issue.team && (
+            <span style={{ backgroundColor: dark.chips[issue.team].bg, color: dark.chips[issue.team].text, fontSize: '11px', fontWeight: 600, padding: '3px 9px', borderRadius: '999px', border: `1px solid ${dark.chips[issue.team].text}33` }}>
+              {issue.team}
+            </span>
+          )}
+          {issue.priority && (
+            <span style={{ backgroundColor: dark.chips[issue.priority].bg, color: dark.chips[issue.priority].text, fontSize: '11px', fontWeight: 600, padding: '3px 9px', borderRadius: '999px' }}>
+              {issue.priority}
+            </span>
+          )}
+          {issue.effort && (
+            <span style={{ backgroundColor: dark.chips[issue.effort].bg, color: dark.chips[issue.effort].text, fontSize: '11px', fontWeight: 600, padding: '3px 9px', borderRadius: '999px' }}>
+              {issue.effort}
+            </span>
+          )}
         </div>
+
         {issue.assignees.length > 0 && (
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px', flexWrap: 'wrap' }}>
             {issue.assignees.map((a) => (
-              <div key={a.login} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <img src={a.avatarUrl} alt={a.login} style={{ width: 22, height: 22, borderRadius: '50%' }} />
-                <span style={{ fontSize: '13px', color: '#374151' }}>@{a.login}</span>
+              <div key={a.login} style={{ display: 'flex', alignItems: 'center', gap: '6px', background: dark.elevated, borderRadius: '999px', padding: '4px 10px 4px 4px', border: `1px solid ${dark.border}` }}>
+                <img src={a.avatarUrl} alt={a.login} style={{ width: 20, height: 20, borderRadius: '50%' }} />
+                <span style={{ fontSize: '12px', color: dark.textSecondary }}>@{a.login}</span>
               </div>
             ))}
           </div>
         )}
+
         {issue.body && (
           <div
-            className="md-body md-body--normal"
+            className="md-body md-body--dark"
             style={{ marginBottom: '20px' }}
             dangerouslySetInnerHTML={{ __html: marked(issue.body) }}
           />
         )}
-        <a href={issue.url} target="_blank" rel="noreferrer" style={{ fontSize: '13px', color: '#2563eb', textDecoration: 'none', fontWeight: 500 }}>
+
+        <a
+          href={issue.url} target="_blank" rel="noreferrer"
+          style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '13px', color: dark.accentBright, textDecoration: 'none', fontWeight: 600, padding: '7px 14px', borderRadius: '8px', background: dark.accentDim, border: `1px solid ${dark.accent}55`, transition: 'all 0.15s' }}
+          onMouseEnter={(e) => { e.currentTarget.style.background = dark.accent; e.currentTarget.style.color = '#fff'; }}
+          onMouseLeave={(e) => { e.currentTarget.style.background = dark.accentDim; e.currentTarget.style.color = dark.accentBright; }}
+        >
           Open on GitHub →
         </a>
       </div>
