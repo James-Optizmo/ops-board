@@ -75,7 +75,7 @@ async function fetchIssues() {
   return response.data.map(shapeIssue);
 }
 
-async function updateIssue(number, { labels, assignees, state }) {
+async function updateIssue(number, { labels, assignees, state, body }) {
   const headers = getHeaders();
   const base = `https://api.github.com/repos/${REPO}/issues/${number}`;
 
@@ -86,6 +86,7 @@ async function updateIssue(number, { labels, assignees, state }) {
   const bodyPatch = {};
   if (assignees !== undefined) bodyPatch.assignees = assignees;
   if (state !== undefined) bodyPatch.state = state;
+  if (body !== undefined) bodyPatch.body = body;
   if (Object.keys(bodyPatch).length > 0) {
     await axios.patch(base, bodyPatch, { headers });
   }

@@ -143,9 +143,9 @@ export default function App() {
         @keyframes popIn { 0% { transform: scale(0.8) translateY(10px); opacity: 0; } 70% { transform: scale(1.05); } 100% { transform: scale(1) translateY(0); opacity: 1; } }
         .fun-card:hover { cursor: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewport='0 0 100 100' style='font-size:24px'><text y='50%'>✨</text></svg>") 16 16, pointer !important; }
         ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: ${dark.surface}; }
-        ::-webkit-scrollbar-thumb { background: ${dark.border}; border-radius: 3px; }
-        ::-webkit-scrollbar-thumb:hover { background: ${dark.accent}; }
+        ::-webkit-scrollbar-track { background: ${funMode ? 'rgba(255,255,255,0.1)' : dark.surface}; }
+        ::-webkit-scrollbar-thumb { background: ${funMode ? 'rgba(255,255,255,0.3)' : dark.border}; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: ${funMode ? 'rgba(255,255,255,0.5)' : dark.accent}; }
       `}</style>
     </div>
   );
