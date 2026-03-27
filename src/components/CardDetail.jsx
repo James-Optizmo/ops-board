@@ -168,16 +168,17 @@ export default function CardDetail({ issue, onClose, funMode, palette }) {
           background: '#2a2540', border: `1px solid ${dark.border}`,
           borderRadius: '14px', padding: '28px', maxWidth: '560px', width: '90%',
           maxHeight: '80vh', overflowY: 'auto',
+          fontFamily: '"Inter", sans-serif',
           boxShadow: `0 24px 60px rgba(0,0,0,0.5), 0 0 0 1px ${dark.accent}33`,
         }}
         onClick={(e) => e.stopPropagation()}
       >
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '14px' }}>
-          <span style={{ fontSize: '12px', color: dark.textMuted, fontWeight: 600 }}>#{issue.number}</span>
-          <button onClick={onClose} style={{ background: dark.elevated, border: `1px solid ${dark.border}`, borderRadius: '6px', cursor: 'pointer', fontSize: '13px', color: dark.textSecondary, width: 28, height: 28, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>✕</button>
+          <span style={{ fontSize: '12px', color: dark.textMuted, fontWeight: 600, fontFamily: '"Inter", sans-serif' }}>#{issue.number}</span>
+          <button onClick={onClose} style={{ background: dark.elevated, border: `1px solid ${dark.border}`, borderRadius: '6px', cursor: 'pointer', fontSize: '13px', color: dark.textSecondary, width: 28, height: 28, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: '"Inter", sans-serif' }}>✕</button>
         </div>
 
-        <h2 style={{ margin: '0 0 16px', fontSize: '17px', fontWeight: 700, color: dark.textPrimary, lineHeight: 1.4 }}>{issue.title}</h2>
+        <h2 style={{ margin: '0 0 16px', fontSize: '17px', fontWeight: 700, color: dark.textPrimary, lineHeight: 1.4, fontFamily: '"Inter", sans-serif' }}>{issue.title}</h2>
 
         <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', marginBottom: '16px' }}>
           {issue.team && (
@@ -202,7 +203,7 @@ export default function CardDetail({ issue, onClose, funMode, palette }) {
             {issue.assignees.map((a) => (
               <div key={a.login} style={{ display: 'flex', alignItems: 'center', gap: '6px', background: dark.elevated, borderRadius: '999px', padding: '4px 10px 4px 4px', border: `1px solid ${dark.border}` }}>
                 <img src={a.avatarUrl} alt={a.login} style={{ width: 20, height: 20, borderRadius: '50%' }} />
-                <span style={{ fontSize: '12px', color: dark.textSecondary }}>@{a.login}</span>
+                <span style={{ fontSize: '12px', color: dark.textSecondary, fontFamily: '"Inter", sans-serif' }}>@{a.login}</span>
               </div>
             ))}
           </div>
@@ -218,7 +219,7 @@ export default function CardDetail({ issue, onClose, funMode, palette }) {
 
         <a
           href={issue.url} target="_blank" rel="noreferrer"
-          style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '13px', color: dark.accentBright, textDecoration: 'none', fontWeight: 600, padding: '7px 14px', borderRadius: '8px', background: dark.accentDim, border: `1px solid ${dark.accent}55`, transition: 'all 0.15s' }}
+          style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '13px', color: dark.accentBright, textDecoration: 'none', fontWeight: 600, padding: '7px 14px', borderRadius: '8px', background: dark.accentDim, border: `1px solid ${dark.accent}55`, transition: 'all 0.15s', fontFamily: '"Inter", sans-serif' }}
           onMouseEnter={(e) => { e.currentTarget.style.background = dark.accent; e.currentTarget.style.color = '#fff'; }}
           onMouseLeave={(e) => { e.currentTarget.style.background = dark.accentDim; e.currentTarget.style.color = dark.accentBright; }}
         >
