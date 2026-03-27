@@ -33,6 +33,7 @@ const EFFORT_OPTIONS = [
 const LABEL_PREFIXES = {
   priority: ['priority:now', 'priority:later'],
   effort: ['effort:large', 'effort:medium', 'effort:small'],
+  status: ['status:in-progress', 'status:proposed'],
 };
 
 function replaceLabel(labels, prefix, newValue) {
@@ -91,6 +92,22 @@ export default function Card({ issue, onUpdate, availableAssignees, funMode }) {
     setSaving('assignee');
     try {
       await onUpdate(issue.number, { assignees: issue.assignees.map((a) => a.login).filter((l) => l !== login) });
+      setSaved(true);
+      setTimeout(() => setSaved(false), 100);
+    } finally {
+      setSaving(null);
+    }
+  }
+
+  async function handleStatusChange(newStatus) {
+    setSaving('status');
+    const newLabels = issue.labels.filter((l) => !LABEL_PREFIXES.status.includes(l));
+    if (newStatus === 'in-progress') newLabels.push('status:in-progress');
+    const patch = { labels: newLabels };
+    if (newStatus === 'done') patch.state = 'closed';
+    if (issue.status === 'done' && newStatus !== 'done') patch.state = 'open';
+    try {
+      await onUpdate(issue.number, patch);
       setSaved(true);
       setTimeout(() => setSaved(false), 100);
     } finally {
@@ -201,6 +218,21 @@ export default function Card({ issue, onUpdate, availableAssignees, funMode }) {
               />
             )}
           </div>
+
+          <div style={{ display: 'flex', gap: '6px', marginTop: '12px' }} onClick={(e) => e.stopPropagation()}>
+            {issue.status === 'proposed' && (
+              <StatusBtn label="⚡ Start" onClick={() => handleStatusChange('in-progress')} saving={saving === 'status'} bg={palette.border} color="#fff" />
+            )}
+            {issue.status === 'in-progress' && (
+              <>
+                <StatusBtn label="← Back" onClick={() => handleStatusChange('proposed')} saving={saving === 'status'} bg={`${palette.border}33`} color={palette.accent} />
+                <StatusBtn label="✓ Done" onClick={() => handleStatusChange('done')} saving={saving === 'status'} bg={palette.border} color="#fff" />
+              </>
+            )}
+            {issue.status === 'done' && (
+              <StatusBtn label="↩ Reopen" onClick={() => handleStatusChange('proposed')} saving={saving === 'status'} bg={`${palette.border}33`} color={palette.accent} />
+            )}
+          </div>
         </div>
         {open && <CardDetail issue={issue} onClose={() => setOpen(false)} funMode={funMode} palette={palette} />}
       </>
@@ -264,20 +296,60 @@ export default function Card({ issue, onUpdate, availableAssignees, funMode }) {
             <AssigneeDropdown assignees={availableAssignees} current={issue.assignees.map((a) => a.login)} saving={saving === 'assignee'} onChange={handleAssigneeChange} />
           )}
         </div>
+
+        <div style={{ display: 'flex', gap: '6px', marginTop: '10px' }} onClick={(e) => e.stopPropagation()}>
+          {issue.status === 'proposed' && (
+            <StatusBtn label="→ Start" onClick={() => handleStatusChange('in-progress')} saving={saving === 'status'} bg={dark.accentDim} color={dark.accentBright} border={`1px solid ${dark.accent}55`} />
+          )}
+          {issue.status === 'in-progress' && (
+            <>
+              <StatusBtn label="← Back" onClick={() => handleStatusChange('proposed')} saving={saving === 'status'} bg={dark.elevated} color={dark.textSecondary} border={`1px solid ${dark.border}`} />
+              <StatusBtn label="✓ Done" onClick={() => handleStatusChange('done')} saving={saving === 'status'} bg="#0f2318" color="#86efac" border="1px solid #22c55e33" />
+            </>
+          )}
+          {issue.status === 'done' && (
+            <StatusBtn label="↩ Reopen" onClick={() => handleStatusChange('proposed')} saving={saving === 'status'} bg={dark.elevated} color={dark.textSecondary} border={`1px solid ${dark.border}`} />
+          )}
+        </div>
       </div>
       {open && <CardDetail issue={issue} onClose={() => setOpen(false)} funMode={false} />}
     </>
   );
 }
 
+function StatusBtn({ label, onClick, saving, bg, color, border }) {
+  return (
+    <button
+      onClick={onClick}
+      disabled={saving}
+      style={{
+        background: bg,
+        color,
+        border: border || 'none',
+        borderRadius: '6px',
+        padding: '3px 10px',
+        fontSize: '11px',
+        fontWeight: 600,
+        fontFamily: 'inherit',
+        cursor: saving ? 'not-allowed' : 'pointer',
+        opacity: saving ? 0.5 : 1,
+        transition: 'opacity 0.15s',
+      }}
+    >
+      {saving ? '…' : label}
+    </button>
+  );
+}
+
 function AssigneeDropdown({ assignees, current, saving, onChange, accentColor }) {
   const [pos, setPos] = useState(null);
+  const containerRef = useRef(null);
   const btnRef = useRef(null);
 
   useEffect(() => {
     if (!pos) return;
     function handleClick(e) {
-      if (btnRef.current && !btnRef.current.contains(e.target)) setPos(null);
+      if (containerRef.current && !containerRef.current.contains(e.target)) setPos(null);
     }
     document.addEventListener('mousedown', handleClick);
     return () => document.removeEventListener('mousedown', handleClick);
@@ -291,7 +363,7 @@ function AssigneeDropdown({ assignees, current, saving, onChange, accentColor })
   }
 
   return (
-    <div style={{ position: 'relative', display: 'inline-block' }}>
+    <div ref={containerRef} style={{ position: 'relative', display: 'inline-block' }}>
       <button
         ref={btnRef}
         onClick={handleOpen}

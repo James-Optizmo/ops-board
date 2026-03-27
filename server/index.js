@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const { fetchIssues, updateIssue, fetchOrgMembers } = require('./github');
+const { fetchIssues, fetchDoneIssues, updateIssue, fetchOrgMembers } = require('./github');
 
 const app = express();
 const PORT = 3001;
@@ -11,6 +11,16 @@ app.use(express.json());
 app.get('/api/issues', async (req, res) => {
   try {
     const issues = await fetchIssues();
+    res.json(issues);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.get('/api/issues/done', async (req, res) => {
+  try {
+    const issues = await fetchDoneIssues();
     res.json(issues);
   } catch (err) {
     console.error(err.message);

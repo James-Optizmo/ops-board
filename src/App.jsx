@@ -60,6 +60,7 @@ export default function App() {
 
   const proposed = boardIssues.filter((i) => i.status === 'proposed');
   const inProgress = boardIssues.filter((i) => i.status === 'in-progress');
+  const done = boardIssues.filter((i) => i.status === 'done');
 
   return (
     <div style={{
@@ -127,7 +128,7 @@ export default function App() {
             <div style={{ display: 'flex', gap: '16px', alignItems: 'flex-start', height: 'calc(100vh - 210px)' }}>
               <Column status="proposed" issues={proposed} onUpdate={updateIssue} availableAssignees={assignees} funMode={funMode} />
               <Column status="in-progress" issues={inProgress} onUpdate={updateIssue} availableAssignees={assignees} funMode={funMode} />
-              <Column status="done" issues={[]} onUpdate={updateIssue} availableAssignees={assignees} funMode={funMode} />
+              <Column status="done" issues={done} onUpdate={updateIssue} availableAssignees={assignees} funMode={funMode} />
             </div>
           )}
         </div>

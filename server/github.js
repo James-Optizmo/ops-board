@@ -51,7 +51,7 @@ function shapeIssue(issue) {
     title: issue.title,
     body: issue.body || '',
     url: issue.html_url,
-    status: parsed.status,
+    status: issue.state === 'closed' ? 'done' : parsed.status,
     team: parsed.team,
     priority: parsed.priority,
     effort: parsed.effort,
@@ -75,7 +75,7 @@ async function fetchIssues() {
   return response.data.map(shapeIssue);
 }
 
-async function updateIssue(number, { labels, assignees }) {
+async function updateIssue(number, { labels, assignees, state }) {
   const headers = getHeaders();
   const base = `https://api.github.com/repos/${REPO}/issues/${number}`;
 
@@ -83,12 +83,26 @@ async function updateIssue(number, { labels, assignees }) {
     await axios.put(`${base}/labels`, { labels }, { headers });
   }
 
-  if (assignees !== undefined) {
-    await axios.patch(base, { assignees }, { headers });
+  const bodyPatch = {};
+  if (assignees !== undefined) bodyPatch.assignees = assignees;
+  if (state !== undefined) bodyPatch.state = state;
+  if (Object.keys(bodyPatch).length > 0) {
+    await axios.patch(base, bodyPatch, { headers });
   }
 
   const { data } = await axios.get(base, { headers });
   return shapeIssue(data);
+}
+
+async function fetchDoneIssues() {
+  const response = await axios.get(
+    `https://api.github.com/repos/${REPO}/issues`,
+    {
+      params: { state: 'closed', per_page: 20 },
+      headers: getHeaders(),
+    }
+  );
+  return response.data.map(shapeIssue);
 }
 
 async function fetchOrgMembers() {
@@ -99,4 +113,4 @@ async function fetchOrgMembers() {
   return data.map((m) => ({ login: m.login, avatarUrl: m.avatar_url }));
 }
 
-module.exports = { fetchIssues, updateIssue, fetchOrgMembers };
+module.exports = { fetchIssues, fetchDoneIssues, updateIssue, fetchOrgMembers };
